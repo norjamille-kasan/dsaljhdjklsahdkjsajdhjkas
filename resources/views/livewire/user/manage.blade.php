@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="mt-6">
-        <x-table :headers="['Name', 'Email', 'Role', '']">
+        <x-table :headers="['Name', 'Email', 'Role', 'Permissions', '']">
             @forelse ($users as $user)
                 <tr>
                     <x-t-cell>{{ $user->name }}</x-t-cell>
@@ -34,6 +34,9 @@
                                 </x-badge>
                             @endif
                         @endforeach
+                    </x-t-cell>
+                    <x-t-cell>
+                   <x-button  icon="tag" flat label="Manage" />
                     </x-t-cell>
                     <x-t-cell>
                         <div class="flex items-center justify-end space-x-1">

@@ -1,3 +1,3 @@
-<x-admin page-title="Submissions">
-  @livewire('admin.submissions')
+<x-admin page-title="Manage Submissions">
+  @livewire('admin.manage-submissions')
 </x-admin>

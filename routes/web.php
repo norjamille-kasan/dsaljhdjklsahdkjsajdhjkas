@@ -44,7 +44,7 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
 
     Route::get('/submission', function () {
         return view('admin.submission');
-    })->name('admin.submittions');
+    })->name('admin.submission');
 
     Route::get('/account-setting', function (Request $request) {
         return view('admin.account-setting', [
@@ -68,8 +68,10 @@ Route::prefix('agent')->middleware(['auth', 'role:Agent'])->group(function () {
         return view('agent.dashboard');
     })->name('agent.dashboard');
 
-    Route::get('/start-form', function (Request $request) {
-        return view('agent.start-form');
+    Route::get('/start-form/{id}', function ($id) {
+        return view('agent.start-form',[
+            'id' => $id,
+        ]);
     })->name('agent.start-form');
 
     Route::get('/account-setting', function (Request $request) {
@@ -80,7 +82,7 @@ Route::prefix('agent')->middleware(['auth', 'role:Agent'])->group(function () {
 
     Route::get('/submissions', function () {
         return view('agent.submission');
-    })->name('agent.submittions');
+    })->name('agent.submissions');
 });
 
 

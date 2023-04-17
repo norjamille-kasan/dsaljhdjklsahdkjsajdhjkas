@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Agent;
+namespace App\Http\Livewire\Admin;
 
 use App\Models\Company;
 use App\Models\Segment;
@@ -10,7 +10,8 @@ use App\Models\Task;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Submissions extends Component
+class ManageSubmissions extends Component
+
 {
     use WithPagination;
     public $filterCompany = '';
@@ -62,9 +63,8 @@ class Submissions extends Component
 
     public function render()
     {
-        return view('livewire.agent.submissions',[
+        return view('livewire.admin.manage-submissions',[
             'submissions' =>Submission::query()
-                ->where('user_id', auth()->user()->id)
                 ->when($this->filterCompany, function ($query) {
                     return $query->where('company_id', $this->filterCompany);
                 })
@@ -80,6 +80,12 @@ class Submissions extends Component
                 ->when($this->filterEndDate, function ($query) {
                     return $query->where('created_at', '<=', $this->filterEndDate);
                 })
+                ->with([
+                    'task',
+                    'submissionAnswers'=>function($query){
+                        $query->with('question')->orderBy('id','desc');
+                    },
+                ])
                 ->orderBy('created_at', $this->filterOrderBy)
                 ->paginate(10)
         ]);
@@ -102,14 +108,5 @@ class Submissions extends Component
     public function print()
     {
         return redirect('/print?filterCompany='.$this->filterCompany.'&filterSegment='.$this->filterSegment.'&filterTask='.$this->filterTask.'&filterStartDate='.$this->filterStartDate.'&filterEndDate='.$this->filterEndDate.'&filterOrderBy='.$this->filterOrderBy.'');
-    }
-
-    public function startNewForm()
-    {
-        $newForm = Submission::create([
-            'user_id' => auth()->user()->id,
-        ]);
-
-        return redirect()->route('agent.start-form', $newForm->id);
     }
 }

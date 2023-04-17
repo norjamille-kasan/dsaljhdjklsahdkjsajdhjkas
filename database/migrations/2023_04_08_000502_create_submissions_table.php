@@ -22,10 +22,11 @@ return new class extends Migration
             $table->dateTime('end_time')->nullable();
             $table->string('record_number')->nullable();
             $table->string('total_time_spent')->nullable();
-            $table->foreignId('company_id')->constrained()->nullable();
-            $table->foreignId('segment_id')->constrained()->nullable();
-            $table->foreignId('task_id')->constrained()->nullable();
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('segment_id')->nullable();
+            $table->unsignedBigInteger('task_id')->nullable();
             $table->dateTime('submitted_at')->nullable();
+            $table->string('status')->default('pending'); // pending, paused, submitted
             $table->timestamps();
         });
     }

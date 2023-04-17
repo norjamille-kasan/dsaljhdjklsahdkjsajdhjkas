@@ -47,8 +47,7 @@ class QuestionService
   }
 
   public function saveAnswer(
-    $start_time,
-    $time_spent,
+    $submission,
     $company,
     $segment,
     $task,
@@ -56,22 +55,24 @@ class QuestionService
   ) {
     $submitionCount = Submission::count();
     $initials = substr(auth()->user()->name, 0, 1);
-    $submission = Submission::create([
+    DB::beginTransaction();
+    $submission->update([
       'user_id' => auth()->user()->id,
       'agent_name' => auth()->user()->name,
-      'start_time' => $start_time,
       'pauses_and_resumes'=>'N/A',
       'end_time' => now(),
       'record_number' => date('Ymd') . '-' . $initials . '-' . ($submitionCount + 1),
-      'total_time_spent' => $time_spent,
       'company_id' => $company,
       'segment_id' => $segment,
       'task_id' => $task,
+      'status' => Submission::SUBMITTED,
     ]);
 
     DB::table('submission_answers')->insert(
       $this->prepareAnswers($questionsForm, $submission->id)
     );
+
+    DB::commit();
     return $submission;
   }
 

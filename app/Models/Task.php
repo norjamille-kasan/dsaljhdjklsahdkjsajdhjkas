@@ -20,4 +20,9 @@ class Task extends Model
     {
         return $this->hasMany(Question::class);
     }
+
+    public function tempAnswer()
+    {
+        return $this->hasOne(TempAnswer::class);
+    }
 }

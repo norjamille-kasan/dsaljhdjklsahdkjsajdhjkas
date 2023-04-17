@@ -29,5 +29,11 @@ class DefaultUserSeeder extends Seeder
             'email' => 'agent@gmail.com',
             'password' => bcrypt('12345678'),
         ])->assignRole($agent);
+
+        // email: admin@gmail.com
+        // password: 12345678
+
+        // email: agent@gmail.com
+        // password: 12345678
     }
 }

@@ -1,7 +1,7 @@
 <div x-data>
     <main class="flex-1">
         <div class="py-8 xl:py-5">
-            <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8 xl:grid xl:max-w-7xl xl:grid-cols-3">
+            <div class="px-4 mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-3">
                 <aside class="hidden xl:block xl:pr-8">
                     <h2 class="text-lg font-bold text-gray-700">Segments</h2>
                     <ul class="mt-5 space-y-3" x-animate>
@@ -42,7 +42,7 @@
                 <div class="xl:col-span-2 xl:border-l xl:border-gray-200 xl:pl-8">
                     <div class="bg-white ">
                         <div x-data="{ addTask: false }">
-                            <div class="max-w-4xl mx-auto divide-y divide-gray-900/10">
+                            <div class="mx-auto divide-y  divide-gray-900/10">
                                 <div class="flex items-center justify-between mb-3">
                                     <h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900">
                                         Tasks

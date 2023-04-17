@@ -2,19 +2,24 @@
 
 namespace App\Http\Livewire\Agent;
 
-use App\Models\Company;
-use App\Models\Question;
-use App\Models\Segment;
+use Carbon\Carbon;
 use App\Models\Task;
+use App\Models\Company;
+use App\Models\Segment;
 use Livewire\Component;
-use App\Services\QuestionService;
+use App\Models\Question;
+use App\Models\Submission;
 use WireUi\Traits\Actions;
+use App\Services\QuestionService;
 
 
 
 class StartForm extends Component
 {
     use Actions;
+
+    public $formId;
+    public $submission;
 
     public $agent_name;
 
@@ -62,9 +67,22 @@ class StartForm extends Component
         ]);
     }
 
-    public function mount()
+    public function mount($formId = null)
     {
         $this->companies = Company::all();
+
+        if ($this->formId) {
+            $this->submission = Submission::find($this->formId);
+            $this->agent_name = $this->submission->agent_name;
+            $this->start_time = $this->submission->start_time;
+            $this->end_time = $this->submission->end_time;
+            $this->record_number = $this->submission->record_number;
+            $this->time_spent = $this->submission->time_spent;
+            $this->pauses_and_resumes = $this->submission->pauses_and_resumes;
+            $this->company = $this->submission->company_id;
+            $this->segment = $this->submission->segment_id;
+            $this->task = $this->submission->task_id;
+        }
     }
 
     public function updatedCompany()
@@ -109,35 +127,35 @@ class StartForm extends Component
 
     public function startTime()
     {
-        $this->start_time = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        $this->start_time = Carbon::now()->format('Y-m-d H:i:s');
     }
 
     public function pauseTime()
     {
         if ($this->last_resume) {
-            $time_spent = \Carbon\Carbon::parse($this->last_resume)->diffInSeconds(\Carbon\Carbon::now());
+            $time_spent = Carbon::parse($this->last_resume)->diffInSeconds(Carbon::now());
             $this->time_spent += $time_spent;
         } else {
-            $this->time_spent = \Carbon\Carbon::parse($this->start_time)->diffInSeconds(\Carbon\Carbon::now());
+            $this->time_spent = Carbon::parse($this->start_time)->diffInSeconds(Carbon::now());
         }
         $this->isPaused = true;
     }
 
     public function resumeTime()
     {
-        $this->last_resume = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        $this->last_resume = Carbon::now()->format('Y-m-d H:i:s');
         $this->isPaused = false;
     }
 
     public function endTime()
     {
-        $this->end_time = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        $this->end_time = Carbon::now()->format('Y-m-d H:i:s');
     }
 
     public function handleSubmit()
     {
-        $this->end_time = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
-        $this->pauseTime();        
+        $this->end_time = Carbon::now()->format('Y-m-d H:i:s');
+        $this->pauseTime();
         $this->validateForm();
 
         $questionCount = count($this->questions);

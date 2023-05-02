@@ -2,23 +2,22 @@
 
 namespace App\Http\Livewire\Agent;
 
-use Carbon\Carbon;
-use App\Models\Task;
 use App\Models\Company;
-use App\Models\Segment;
-use Livewire\Component;
 use App\Models\Question;
+use App\Models\Segment;
 use App\Models\Submission;
-use WireUi\Traits\Actions;
+use App\Models\Task;
 use App\Services\QuestionService;
-
-
+use Carbon\Carbon;
+use Livewire\Component;
+use WireUi\Traits\Actions;
 
 class StartForm extends Component
 {
     use Actions;
 
     public $formId;
+
     public $submission;
 
     public $agent_name;
@@ -164,11 +163,11 @@ class StartForm extends Component
 
         foreach ($this->questions as $question) {
             $keys = array_keys($this->questionsForm);
-            if (!in_array($question->id, $keys)) {
-                $this->addError('questionsForm.' . $question->id, 'This question is required');
+            if (! in_array($question->id, $keys)) {
+                $this->addError('questionsForm.'.$question->id, 'This question is required');
             } else {
                 if (empty($this->questionsForm[$question->id])) {
-                    $this->addError('questionsForm.' . $question->id, 'This question is required');
+                    $this->addError('questionsForm.'.$question->id, 'This question is required');
                 }
             }
         }

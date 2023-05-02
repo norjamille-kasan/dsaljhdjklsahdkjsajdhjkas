@@ -13,14 +13,18 @@
 
         @wireUiScripts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+       
         @livewireStyles
         <style>
             [x-cloak] { display: none !important; }
         </style>
     </head>
     <body class="h-full font-sans antialiased">
+        <x-notifications />
         <x-dialog />
        {{ $slot }}
        @livewireScripts
+       @livewireChartsScripts
+       @stack('scripts')
     </body>
 </html>

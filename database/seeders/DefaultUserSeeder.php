@@ -24,16 +24,10 @@ class DefaultUserSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ])->assignRole($admin);
 
-        User::create([
+        $test_user = User::create([
             'name' => 'Test-Agent',
             'email' => 'agent@gmail.com',
             'password' => bcrypt('12345678'),
         ])->assignRole($agent);
-
-        // email: admin@gmail.com
-        // password: 12345678
-
-        // email: agent@gmail.com
-        // password: 12345678
     }
 }

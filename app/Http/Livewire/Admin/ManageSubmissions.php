@@ -11,32 +11,39 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 class ManageSubmissions extends Component
-
 {
     use WithPagination;
+
     public $filterCompany = '';
+
     public $filterSegment = '';
+
     public $filterTask = '';
+
     public $filterStartDate = '';
+
     public $filterEndDate = '';
+
     public $filterOrderBy = 'desc';
 
     public $showQuestions = false;
 
     public $queryString = [
-        'filterCompany' => ['except' => '','as'=>'company'],
-        'filterSegment' => ['except' => '','as'=>'segment'],
-        'filterTask' => ['except' => '','as'=>'task'],
-        'filterStartDate' => ['except' => '','as'=>'from_date'],
-        'filterEndDate' => ['except' => '','as'=>'to_date'],
-        'filterOrderBy' => ['except' => 'desc','as'=>'order_by'],
+        'filterCompany' => ['except' => '', 'as' => 'company'],
+        'filterSegment' => ['except' => '', 'as' => 'segment'],
+        'filterTask' => ['except' => '', 'as' => 'task'],
+        'filterStartDate' => ['except' => '', 'as' => 'from_date'],
+        'filterEndDate' => ['except' => '', 'as' => 'to_date'],
+        'filterOrderBy' => ['except' => 'desc', 'as' => 'order_by'],
     ];
 
     public $companies = [];
-    public $segments = [];
-    public $tasks = [];
-    public $answers = [];
 
+    public $segments = [];
+
+    public $tasks = [];
+
+    public $answers = [];
 
     public function mount()
     {
@@ -63,8 +70,9 @@ class ManageSubmissions extends Component
 
     public function render()
     {
-        return view('livewire.admin.manage-submissions',[
-            'submissions' =>Submission::query()
+        return view('livewire.admin.manage-submissions', [
+            'submissions' => Submission::query()
+                ->where('status','submitted')
                 ->when($this->filterCompany, function ($query) {
                     return $query->where('company_id', $this->filterCompany);
                 })
@@ -82,12 +90,12 @@ class ManageSubmissions extends Component
                 })
                 ->with([
                     'task',
-                    'submissionAnswers'=>function($query){
-                        $query->with('question')->orderBy('id','desc');
+                    'submissionAnswers' => function ($query) {
+                        $query->with('question')->orderBy('id', 'desc');
                     },
                 ])
                 ->orderBy('created_at', $this->filterOrderBy)
-                ->paginate(10)
+                ->paginate(10),
         ]);
     }
 

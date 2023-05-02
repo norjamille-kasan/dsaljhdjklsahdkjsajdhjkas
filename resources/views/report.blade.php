@@ -58,6 +58,9 @@
                     Record Number
                 </th>
                 <th>
+                    Pause ID
+                </th>
+                <th>
                     Company Name
                 </th>
                 <th>
@@ -88,6 +91,7 @@
                         ({{ $time_spent }})
                     </td>
                     <td>{{ $submission->record_number }}</td>
+                    <td>{{ $submission->pause_id }}</td>
                     <td>{{ $submission->company->name }}</td>
                     <td>{{ $submission->segment->description }}</td>
                     <td>{{ $submission->task->name }}</td>

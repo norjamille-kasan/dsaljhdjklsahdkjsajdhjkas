@@ -14,19 +14,19 @@
         class="grid grid-cols-6 gap-4 p-5 mx-auto border border-t-4 rounded-md max-w-7xl bg-gray-50 border-t-blue-600">
         <div class="gap-3 sm:col-span-4">
             <div class="space-y-4">
-                <x-native-select :disabled="$submission->isPaused()" wire:model="companyId" label="Choose Company">
+                <x-native-select :disabled="$submission->isPaused() || !$submission->isInProgress()" wire:model="companyId" label="Choose Company">
                     <option value="">Select Company</option>
                     @foreach ($companies as $company)
                         <option value="{{ $company->id }}">{{ $company->name }}</option>
                     @endforeach
                 </x-native-select>
-                <x-native-select :disabled="$submission->isPaused()" wire:model="segmentId" label="Choose Segment">
+                <x-native-select :disabled="$submission->isPaused() || !$submission->isInProgress()" wire:model="segmentId" label="Choose Segment">
                     <option value="">Select Segment</option>
                     @foreach ($segments as $segment)
                         <option value="{{ $segment->id }}">{{ $segment->description }}</option>
                     @endforeach
                 </x-native-select>
-                <x-native-select :disabled="$submission->isPaused()" wire:model="taskId" label="Choose Task">
+                <x-native-select :disabled="$submission->isPaused() || !$submission->isInProgress()" wire:model="taskId" label="Choose Task">
                     <option value="">Select Task</option>
                     @foreach ($tasks as $task)
                         <option value="{{ $task->id }}">{{ $task->name }}</option>
@@ -65,7 +65,9 @@
                     </div>
                 </div>
                 <div class="flex mt-2 space-x-2">
+                   @if ($submission->isInProgress())
                     <x-button positive wire:click="handleSave" spinner="handleSave" label="Save" />
+                   @endif
                 </div>
             @endif
         </div>
@@ -87,7 +89,7 @@
                 </div>
                 <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500"><span
                         class="font-medium {{ $activity->description =='Paused' ? 'text-yellow-500' : 'text-green-600' }}">
-                    {{ $activity->description  }}    
+               {{ $activity->description  }}    
                 </span>
                 at {{ \Carbon\Carbon::parse($activity->date_and_time)->format('M d, Y h:i A') }}
             </p>

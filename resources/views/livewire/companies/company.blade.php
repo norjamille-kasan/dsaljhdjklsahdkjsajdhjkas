@@ -42,15 +42,17 @@
                 <div class="xl:col-span-2 xl:border-l xl:border-gray-200 xl:pl-8">
                     <div class="bg-white ">
                         <div x-data="{ addTask: false }">
-                            <div class="mx-auto divide-y  divide-gray-900/10">
+                            <div class="mx-auto divide-y divide-gray-900/10">
                                 <div class="flex items-center justify-between mb-3">
                                     <h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900">
                                         Tasks
                                     </h2>
-                                    @if ($selectedSegmentId)
-                                        <x-button x-on:click="addTask=!addTask" primary flat icon="plus">Add New Task
-                                        </x-button>
-                                    @endif
+                                   @can('create task')
+                                        @if ($selectedSegmentId)
+                                            <x-button x-on:click="addTask=!addTask" primary flat icon="plus">Add New Task
+                                            </x-button>
+                                        @endif
+                                   @endcan
                                 </div>
                                 <div class="pt-3">
                                     @if ($selectedSegmentId)
@@ -80,23 +82,32 @@
                                                                             </div>
                                                                             <div
                                                                                 class="relative flex items-center pl-3 pr-4 space-x-2 text-sm font-medium text-right whitespace-nowrap ">
-                                                                                <button x-on:click="show=!show">
-                                                                                    <svg x-bind:class="{
-                                                                                        'rotate-180 duration-150': show,
-                                                                                        'rotate-0 duration-150':
-                                                                                            !show
-                                                                                    }"
-                                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none"
-                                                                                        viewBox="0 0 24 24"
-                                                                                        stroke-width="1.5"
-                                                                                        stroke="currentColor"
-                                                                                        class="w-6 h-6">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                                                                    </svg>
-                                                                                </button>
+                                                                               @can('delete task')
+                                                                               <x-button  flat x-on:confirm="{
+                                                                                title: 'Sure Delete?',
+                                                                                icon: 'warning',
+                                                                                method: 'deleteTask',
+                                                                                params: {{ $task->id }}
+                                                                            }"
+                                                                                icon="trash" />
+                                                                               @endcan
+                                                                                    <button x-on:click="show=!show">
+                                                                                        <svg x-bind:class="{
+                                                                                            'rotate-180 duration-150': show,
+                                                                                            'rotate-0 duration-150':
+                                                                                                !show
+                                                                                        }"
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            fill="none"
+                                                                                            viewBox="0 0 24 24"
+                                                                                            stroke-width="1.5"
+                                                                                            stroke="currentColor"
+                                                                                            class="w-6 h-6">
+                                                                                            <path stroke-linecap="round"
+                                                                                                stroke-linejoin="round"
+                                                                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                                                                        </svg>
+                                                                                    </button>
                                                                             </div>
                                                                         </div>
                                                                         <div x-show="show" x-collapse.duration.500>
@@ -151,7 +162,7 @@
                                                                                            @endif
                                                                                         </li>
                                                                                     @empty
-                                                                                        <li>
+                                                                                        <li class="px-5">
                                                                                             No questions found
                                                                                         </li>
                                                                                     @endforelse

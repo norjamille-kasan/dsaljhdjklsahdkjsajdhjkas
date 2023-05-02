@@ -15,12 +15,15 @@ class Submission extends Model
         'pending' => 'Pending',
         'in_progress' => 'In Progress',
         'paused' => 'Paused',
-        'submitted' => 'Submitted'
+        'submitted' => 'Submitted',
     ];
 
     const PENDING = 'pending';
+
     const IN_PROGRESS = 'in_progress';
+
     const PAUSED = 'paused';
+
     const SUBMITTED = 'submitted';
 
     public function task()
@@ -67,7 +70,6 @@ class Submission extends Model
     {
         return $this->status === self::SUBMITTED;
     }
-
 
     public function getStatus()
     {

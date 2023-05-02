@@ -13,29 +13,37 @@ use Livewire\WithPagination;
 class Submissions extends Component
 {
     use WithPagination;
+
     public $filterCompany = '';
+
     public $filterSegment = '';
+
     public $filterTask = '';
+
     public $filterStartDate = '';
+
     public $filterEndDate = '';
+
     public $filterOrderBy = 'desc';
 
     public $showQuestions = false;
 
     public $queryString = [
-        'filterCompany' => ['except' => '','as'=>'company'],
-        'filterSegment' => ['except' => '','as'=>'segment'],
-        'filterTask' => ['except' => '','as'=>'task'],
-        'filterStartDate' => ['except' => '','as'=>'from_date'],
-        'filterEndDate' => ['except' => '','as'=>'to_date'],
-        'filterOrderBy' => ['except' => 'desc','as'=>'order_by'],
+        'filterCompany' => ['except' => '', 'as' => 'company'],
+        'filterSegment' => ['except' => '', 'as' => 'segment'],
+        'filterTask' => ['except' => '', 'as' => 'task'],
+        'filterStartDate' => ['except' => '', 'as' => 'from_date'],
+        'filterEndDate' => ['except' => '', 'as' => 'to_date'],
+        'filterOrderBy' => ['except' => 'desc', 'as' => 'order_by'],
     ];
 
     public $companies = [];
-    public $segments = [];
-    public $tasks = [];
-    public $answers = [];
 
+    public $segments = [];
+
+    public $tasks = [];
+
+    public $answers = [];
 
     public function mount()
     {
@@ -62,8 +70,8 @@ class Submissions extends Component
 
     public function render()
     {
-        return view('livewire.agent.submissions',[
-            'submissions' =>Submission::query()
+        return view('livewire.agent.submissions', [
+            'submissions' => Submission::query()
                 ->where('user_id', auth()->user()->id)
                 ->when($this->filterCompany, function ($query) {
                     return $query->where('company_id', $this->filterCompany);
@@ -81,7 +89,7 @@ class Submissions extends Component
                     return $query->where('created_at', '<=', $this->filterEndDate);
                 })
                 ->orderBy('created_at', $this->filterOrderBy)
-                ->paginate(10)
+                ->paginate(10),
         ]);
     }
 

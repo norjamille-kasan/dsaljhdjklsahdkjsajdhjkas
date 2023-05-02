@@ -18,6 +18,8 @@
     "dependencies": {
         "@alpinejs/collapse": "^3.12.0",
         "@alpinejs/persist": "^3.12.0",
-        "@formkit/auto-animate": "^1.0.0-beta.6"
+        "@formkit/auto-animate": "^1.0.0-beta.6",
+        "apexcharts": "^3.39.0",
+        "chart.js": "^4.2.1"
     }
 }

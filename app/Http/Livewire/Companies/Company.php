@@ -174,4 +174,16 @@ class Company extends Component
             $description = 'You have successfully updated a question.'
         );
     }
+
+    public function deleteTask($taskId)
+    {
+        $task = Task::find($taskId);
+
+        $task->delete();
+        
+        $this->notification()->success(
+            $title = 'Success',
+            $description = 'You have successfully deleted a task.'
+        );
+    }
 }

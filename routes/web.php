@@ -42,6 +42,12 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
         return view('admin.users');
     })->name('admin.users');
 
+    Route::get('/users/{id}/permissions', function ($id) {
+        return view('admin.permissions',[
+            'id' => $id,
+        ]);
+    })->name('admin.permissions');
+
     Route::get('/submission', function () {
         return view('admin.submission');
     })->name('admin.submission');
@@ -69,7 +75,7 @@ Route::prefix('agent')->middleware(['auth', 'role:Agent'])->group(function () {
     })->name('agent.dashboard');
 
     Route::get('/start-form/{id}', function ($id) {
-        return view('agent.start-form',[
+        return view('agent.start-form', [
             'id' => $id,
         ]);
     })->name('agent.start-form');
@@ -85,40 +91,33 @@ Route::prefix('agent')->middleware(['auth', 'role:Agent'])->group(function () {
     })->name('agent.submissions');
 });
 
-
 Route::get('/print', function (Request $request) {
-    
-    return view('report',[
-        'submissions' =>\App\Models\Submission::query()
+    return view('report', [
+        'submissions' => \App\Models\Submission::query()
             ->when(auth()->user()->hasRole('Agent'), function ($query) {
                 return $query->where('user_id', auth()->user()->id);
             })
             ->when(
-                $request->filterCompany
-                , function ($query) use($request) {
-                return $query->where('company_id',$request->filterCompany);
-            })
+                $request->filterCompany, function ($query) use ($request) {
+                    return $query->where('company_id', $request->filterCompany);
+                })
             ->when(
-                $request->filterSegment
-                , function ($query) use($request) {
-                return $query->where('segment_id',$request->filterSegment);
-            })
+                $request->filterSegment, function ($query) use ($request) {
+                    return $query->where('segment_id', $request->filterSegment);
+                })
             ->when(
-                $request->filterTask
-                , function ($query) use($request) {
-                return $query->where('task_id',$request->filterTask);
-            })
+                $request->filterTask, function ($query) use ($request) {
+                    return $query->where('task_id', $request->filterTask);
+                })
             ->when(
-                $request->filterStartDate
-                , function ($query) use($request) {
-                return $query->where('created_at','>=',$request->filterStartDate);
-            })
+                $request->filterStartDate, function ($query) use ($request) {
+                    return $query->where('created_at', '>=', $request->filterStartDate);
+                })
             ->when(
-                $request->filterEndDate
-                , function ($query) use($request) {
-                return $query->where('created_at','<=',$request->filterEndDate);
-            })
-            ->get()
+                $request->filterEndDate, function ($query) use ($request) {
+                    return $query->where('created_at', '<=', $request->filterEndDate);
+                })
+            ->get(),
     ]);
 });
 

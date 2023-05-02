@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('timelines', function (Blueprint $table) {
             $table->id();
+            $table->string('ref_no')->nullable();
             $table->string('description'); // paused or resume
             $table->dateTime('date_and_time');
             $table->string('time_before_resume')->nullable();

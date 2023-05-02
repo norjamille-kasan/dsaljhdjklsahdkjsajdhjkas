@@ -2,35 +2,40 @@
 
 namespace App\Http\Livewire\Agent;
 
-use Livewire\Component;
-use App\Models\Submission;
 use App\Models\Company;
 use App\Models\Question;
 use App\Models\Segment;
+use App\Models\Submission;
 use App\Models\Task;
 use App\Models\Timeline;
-use Carbon\Carbon;
-use WireUi\Traits\Actions;
-use WireUi\View\Components\Card;
 use App\Services\QuestionService;
-
+use Carbon\Carbon;
+use Livewire\Component;
+use WireUi\Traits\Actions;
 
 class TaskForm extends Component
 {
     use Actions;
+
     public $submissionId;
 
     public $submission;
+
     public $answers;
 
     public $companies = [];
+
     public $segments = [];
+
     public $tasks = [];
+
     public $questions = [];
 
     // form attributes
     public $companyId;
+
     public $segmentId;
+
     public $taskId;
 
     // temp answers
@@ -40,7 +45,7 @@ class TaskForm extends Component
 
     public function mount($submissionId)
     {
-        abort_if(!$submissionId, 404);
+        abort_if(! $submissionId, 404);
         $this->submissionId = $submissionId;
         $this->submission = Submission::findOrFail($submissionId);
 
@@ -56,7 +61,7 @@ class TaskForm extends Component
         $this->questions = $this->taskId ? Question::whereTaskId($this->taskId)->get() : [];
 
         // load temp answers if task is selected | node :  can be empty
-        $this->tempAnswers =$this->taskId ?  $this->submission->tempAnswer : [];
+        $this->tempAnswers = $this->taskId ? $this->submission->tempAnswer : [];
 
         if ($this->tempAnswers) {
             $tempAnswers = json_decode($this->tempAnswers->question_answers);
@@ -70,7 +75,7 @@ class TaskForm extends Component
     {
         $this->segments = Segment::where('company_id', $this->companyId)->get();
         $this->submission->update([
-            'company_id' => $this->companyId
+            'company_id' => $this->companyId,
         ]);
     }
 
@@ -79,7 +84,7 @@ class TaskForm extends Component
         $this->tasks = Task::where('segment_id', $this->segmentId)->get();
 
         $this->submission->update([
-            'segment_id' => $this->segmentId
+            'segment_id' => $this->segmentId,
         ]);
     }
 
@@ -88,48 +93,46 @@ class TaskForm extends Component
         $this->questions = Question::whereTaskId($this->taskId)->get();
 
         $this->submission->update([
-            'task_id' => $this->taskId
+            'task_id' => $this->taskId,
         ]);
 
         // questions that are already answered by the agent should be loaded
 
         // if there is no temp answers, create new temp answers
-        if(!$this->tempAnswers){
+        if (! $this->tempAnswers) {
             $this->tempAnswers = $this->submission->tempAnswer()->create([
                 'task_id' => $this->taskId,
-                'question_answers' => $this->questions->map(function($question){
+                'question_answers' => $this->questions->map(function ($question) {
                     return [
                         'question_id' => $question->id,
-                        'answer' => null
+                        'answer' => null,
                     ];
-                })
+                }),
             ]);
-        }else{
+        } else {
             // if there are temp answers, update the temp answers
             $this->tempAnswers->update([
                 'task_id' => $this->taskId,
-                'question_answers' => $this->questions->map(function($question){
+                'question_answers' => $this->questions->map(function ($question) {
                     return [
                         'question_id' => $question->id,
-                        'answer' => null
+                        'answer' => null,
                     ];
-                })
+                }),
             ]);
         }
     }
 
     public function render()
     {
-        return view('livewire.agent.task-form',[
-            'timelines'=>Timeline::where('submission_id', $this->submission->id)->latest()->get()
+        return view('livewire.agent.task-form', [
+            'timelines' => Timeline::where('submission_id', $this->submission->id)->latest()->get(),
         ]);
     }
 
     public function handleSave()
     {
         $this->validateForms();
-
-      
 
         (new QuestionService)->saveAnswer(
             $this->submission,
@@ -141,7 +144,7 @@ class TaskForm extends Component
 
         $this->submission->timelines()->create([
             'description' => 'Paused',
-            'date_and_time'=> Carbon::now()
+            'date_and_time' => Carbon::now(),
         ]);
 
         $this->notification()->success(
@@ -152,25 +155,33 @@ class TaskForm extends Component
         return redirect()->route('agent.submissions');
     }
 
-
     // ------------------ Actions ------------------ //
     public function clickStart()
     {
         $this->submission->update([
             'start_time' => Carbon::now(),
-            'status' => Submission::IN_PROGRESS
+            'status' => Submission::IN_PROGRESS,
         ]);
     }
 
     public function clickPause()
     {
-        $this->submission->update([
-            'status' => Submission::PAUSED
-        ]);
-
+        $this->submission->refresh();
+        if (!$this->submission->pause_id) {
+            $ref_no = Carbon::now()->format('Ymd').'-T-P'.str_pad($this->submission->id, 10, '0', STR_PAD_LEFT);
+            $this->submission->update([
+                'pause_id' => $ref_no, // '20210901-T-P0000000001
+                'status' => Submission::PAUSED,
+            ]);
+        }else{
+            $this->submission->update([
+                'status' => Submission::PAUSED,
+            ]);
+        }
+       
         $this->submission->timelines()->create([
             'description' => 'Paused',
-            'date_and_time'=> Carbon::now()
+            'date_and_time' => Carbon::now(),
         ]);
 
         // update the temp answers with the current answers from questionsForm
@@ -180,12 +191,12 @@ class TaskForm extends Component
             foreach ($this->questionsForm as $questionId => $answer) {
                 $new_question_answers[] = [
                     'question_id' => $questionId,
-                    'answer' => $answer
+                    'answer' => $answer,
                 ];
             }
-    
+
             $this->tempAnswers->update([
-                'question_answers' => $new_question_answers
+                'question_answers' => $new_question_answers,
             ]);
         }
     }
@@ -195,32 +206,32 @@ class TaskForm extends Component
         $lastAction = Timeline::where('submission_id', $this->submission->id)
                         ->latest()
                         ->first();
-        if($lastAction->description === "Paused"){
+        if ($lastAction->description === 'Paused') {
             $pausedDuration = Carbon::now()->diffInSeconds($lastAction->date_and_time);
-
+          
             $createNewTimeline = Timeline::create([
                 'submission_id' => $this->submission->id,
                 'description' => 'Resumed',
-                'date_and_time'=> Carbon::now(),
-                'time_before_resume'=>$pausedDuration,
+                'date_and_time' => Carbon::now(),
+                'time_before_resume' => $pausedDuration,
             ]);
 
             $this->submission->update([
-                'status' => Submission::IN_PROGRESS
+                'status' => Submission::IN_PROGRESS,
             ]);
         }
     }
 
     // ------------------ Helpers ------------------ //
     // if form already started, load the data
-    function loadUnfinishedSubmission($submission)
+    public function loadUnfinishedSubmission($submission)
     {
         $this->companyId = $submission->company_id;
         $this->segmentId = $submission->segment_id;
         $this->taskId = $submission->task_id;
     }
 
-    function validateForms()
+    public function validateForms()
     {
         $this->validate([
             'companyId' => 'required',
@@ -230,11 +241,11 @@ class TaskForm extends Component
 
         foreach ($this->questions as $question) {
             $keys = array_keys($this->questionsForm);
-            if (!in_array($question->id, $keys)) {
-                $this->addError('questionsForm.' . $question->id, 'This question is required');
+            if (! in_array($question->id, $keys)) {
+                $this->addError('questionsForm.'.$question->id, 'This question is required');
             } else {
                 if (empty($this->questionsForm[$question->id])) {
-                    $this->addError('questionsForm.' . $question->id, 'This question is required');
+                    $this->addError('questionsForm.'.$question->id, 'This question is required');
                 }
             }
         }

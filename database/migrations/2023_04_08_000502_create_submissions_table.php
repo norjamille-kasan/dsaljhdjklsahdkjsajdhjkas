@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
+            $table->string('pause_id')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->string('agent_name')->nullable();
             $table->dateTime('start_time')->nullable();

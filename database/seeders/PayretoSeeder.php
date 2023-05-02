@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Company;
+use Illuminate\Database\Seeder;
+
 class PayretoSeeder extends Seeder
 {
     /**
@@ -27,7 +27,7 @@ class PayretoSeeder extends Seeder
                 'Client Meeting',
                 'Admin & Other Tasks',
             ],
-            'Payreto - Onboarding'=>[
+            'Payreto - Onboarding' => [
                 'Break',
                 'Internal Training',
                 'External Training',
@@ -35,14 +35,14 @@ class PayretoSeeder extends Seeder
                 'Client Meeting',
                 'Admin & Other Tasks',
             ],
-           ' Payreto - Chargeback'=>[
+            ' Payreto - Chargeback' => [
                 'Break',
                 'Internal Training',
                 'External Training',
                 'Internal Meeting',
                 'Client Meeting',
                 'Admin & Other Tasks',
-           ],
+            ],
         ];
 
         foreach ($segmentsWithTask as $segment => $tasks) {
@@ -56,6 +56,5 @@ class PayretoSeeder extends Seeder
                 ]);
             }
         }
-
     }
 }

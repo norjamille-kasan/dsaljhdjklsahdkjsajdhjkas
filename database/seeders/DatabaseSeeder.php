@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DefaultUserSeeder::class,
             PermissionSeeders::class,
+            PayretoSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 

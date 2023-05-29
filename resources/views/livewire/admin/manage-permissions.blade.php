@@ -1,6 +1,6 @@
 <div class="space-y-4">
     <div>
-        <h1 class="text-xl font-semibold text-indigo-600">Manage {{ $user->name }} permissions</h1>
+        <h1 class="text-xl font-semibold text-indigo-600">Manage {{ $role->name }} permissions</h1>
     </div>
     <ul role="list" class="px-5 border divide-y divide-gray-100 rounded-md">
         <li wire:key="2" class="flex items-center justify-between py-5 gap-x-6">
@@ -10,7 +10,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to create new task
+                        Allow {{ $role->name }} to create new task
                     </p>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to edit task
+                        Allow {{ $role->name }} to edit task
                     </p>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to delete existing tasks
+                        Allow {{ $role->name }} to delete existing tasks
                     </p>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to view submissions made by other users
+                        Allow {{ $role->name }} to view submissions made by other users
                     </p>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to create new users
+                        Allow {{ $role->name }} to create new users
                     </p>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to edit existing users
+                        Allow {{ $role->name }} to edit existing users
                     </p>
                 </div>
             </div>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to delete existing users
+                        Allow {{ $role->name }} to delete existing users
                     </p>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="flex items-center mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                     <p class="whitespace-nowrap">
-                        Allow {{ $user->name }} to manage permissions of other users
+                        Allow {{ $role->name }} to manage permissions of other users
                     </p>
                 </div>
             </div>

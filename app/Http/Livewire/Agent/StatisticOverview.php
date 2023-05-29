@@ -27,7 +27,7 @@ class StatisticOverview extends Component
                 DB::raw('"submission_today" as label'),
                 DB::raw('count(*) as value'),
             ]);
-            
+
         $my_total_submission_this_month = DB::table('submissions')
             ->where('user_id', auth()->user()->id)
             ->where('status','submitted')
@@ -36,7 +36,7 @@ class StatisticOverview extends Component
                 DB::raw('"submission_this_month" as label'),
                 DB::raw('count(*) as value'),
             ]);
-        
+
         $my_total_submission = DB::table('submissions')
             ->where('user_id', auth()->user()->id)
             ->where('status','submitted')
@@ -63,15 +63,18 @@ class StatisticOverview extends Component
             ->select('company_id', DB::raw('count(*) as total'))
             ->groupBy('company_id')
             ->get();
-            $startDate = now()->subDays(7)->format('Y-m-d');
+
+            $startDate  = now()->subDays(7)->format('Y-m-d');
             $endDate = now()->format('Y-m-d');
-            
+
             $data = DB::table('submissions')
                 ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
-                ->whereBetween('created_at', [$startDate, $endDate])
+                ->whereDate('created_at', '>=', $startDate)
+                ->whereDate('created_at', '<=', $endDate)
+                ->where('user_id', auth()->user()->id)
+                ->where('status','submitted')
                 ->groupBy('date')
                 ->get();
-            
                 foreach (range(-6, 0) as $daysAgo) {
                     $date = now()->addDays($daysAgo)->format('Y-m-d');
                     $count = 0;
@@ -88,7 +91,6 @@ class StatisticOverview extends Component
                     }
                     $this->lineGraph[$date] = $count;
                 }
-                
     }
     public function render()
     {

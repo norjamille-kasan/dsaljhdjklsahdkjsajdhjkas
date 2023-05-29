@@ -23,31 +23,19 @@
         </div>
     </div>
     <div class="mt-6">
-        <x-table :headers="['Name', 'Email', 'Role', 'Permissions', '']">
+        <x-table :headers="['Name', 'Email', 'Role', '']">
             @forelse ($users as $user)
                 <tr>
                     <x-t-cell>{{ $user->name }}</x-t-cell>
                     <x-t-cell>{{ $user->email }}</x-t-cell>
                     <x-t-cell>
                         @foreach ($user->roles as $role)
-                            @if ($role->name === 'Admin')
-                                <x-badge color="green">
-                                    {{ $role->name }}
-                                </x-badge>
-                            @elseif($role->name === 'Agent')
-                                <x-badge color="blue">
-                                    {{ $role->name }}
-                                </x-badge>
-                            @endif
+                            <x-badge color="green">
+                                {{ $role->name }}
+                            </x-badge>
                         @endforeach
                     </x-t-cell>
-                    <x-t-cell>
-                        @can('manage permissions')
-                            <x-button href="{{ route('admin.permissions',['id'=>$user->id]) }}" icon="tag" flat label="Manage" />
-                        @else
-                        <x-button disabled  icon="tag" flat label="Manage" title="You have no permission to manage permission" />
-                        @endcan
-                    </x-t-cell>
+
                     <x-t-cell>
                         <div class="flex items-center justify-end space-x-1">
                             @can('edit user')
@@ -110,8 +98,9 @@
                             placeholder="Password" />
                         <x-native-select wire:model.defer="createForm.role" label="Role">
                             <option value="">Select Role</option>
-                            <option value="Agent">Agent</option>
-                            <option value="Admin">Admin</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @endforeach
                         </x-native-select>
                     </div>
                     <x-slot name="footer">

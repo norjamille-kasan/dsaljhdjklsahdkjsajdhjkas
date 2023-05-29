@@ -6,7 +6,7 @@
     <div class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
       <!--
         Off-canvas menu backdrop, show/hide based on off-canvas menu state.
-  
+
         Entering: "transition-opacity ease-linear duration-300"
           From: "opacity-0"
           To: "opacity-100"
@@ -15,11 +15,11 @@
           To: "opacity-0"
       -->
       <div class="fixed inset-0 bg-gray-900/80"></div>
-  
+
       <div class="fixed inset-0 flex">
         <!--
           Off-canvas menu, show/hide based on off-canvas menu state.
-  
+
           Entering: "transition ease-in-out duration-300 transform"
             From: "-translate-x-full"
             To: "translate-x-0"
@@ -30,7 +30,7 @@
         <div class="relative flex flex-1 w-full max-w-xs mr-16">
           <!--
             Close button, show/hide based on off-canvas menu state.
-  
+
             Entering: "ease-in-out duration-300"
               From: "opacity-0"
               To: "opacity-100"
@@ -46,7 +46,7 @@
               </svg>
             </button>
           </div>
-  
+
           <!-- Sidebar component, swap this element with another sidebar if you like -->
           <div class="flex flex-col px-6 pb-4 overflow-y-auto bg-indigo-600 grow gap-y-5">
             <div class="flex items-center h-16 shrink-0">
@@ -65,7 +65,7 @@
                         Dashboard
                       </a>
                     </li>
-  
+
                     <li>
                       <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
                         <svg class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -74,7 +74,7 @@
                         Team
                       </a>
                     </li>
-  
+
                     <li>
                       <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
                         <svg class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -83,7 +83,7 @@
                         Projects
                       </a>
                     </li>
-  
+
                     <li>
                       <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
                         <svg class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -92,7 +92,7 @@
                         Calendar
                       </a>
                     </li>
-  
+
                     <li>
                       <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
                         <svg class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -101,7 +101,7 @@
                         Documents
                       </a>
                     </li>
-  
+
                     <li>
                       <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
                         <svg class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -123,14 +123,14 @@
                         <span class="truncate">Heroicons</span>
                       </a>
                     </li>
-  
+
                     <li>
                       <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
                         <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">T</span>
                         <span class="truncate">Tailwind Labs</span>
                       </a>
                     </li>
-  
+
                     <li>
                       <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
                         <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">W</span>
@@ -154,7 +154,7 @@
         </div>
       </div>
     </div>
-  
+
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
@@ -169,24 +169,31 @@
             <li>
               <ul role="list" class="-mx-2 space-y-1">
                 <li>
-                  <a href="{{ route('agent.dashboard') }}" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white">
+                  <a href="{{ route('agent.dashboard') }}"
+                  class="
+                    {{ request()->routeIs('agent.dashboard') ? 'bg-white text-indigo-600' : 'text-indigo-200 hover:text-white hover:bg-indigo-700' }}
+                  flex p-2 text-sm font-semibold leading-6  rounded-md group gap-x-3 ">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
                     Dashboard
                   </a>
                 </li>
                 <li>
-                  <a href="{{ route('agent.submissions') }}" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"  class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white">
+                  <a href="{{ route('agent.submissions') }}" class="
+                    {{ request()->routeIs('agent.submissions') ? 'bg-white text-indigo-600' : 'text-indigo-200 hover:text-white hover:bg-indigo-700' }}
+                  flex p-2 text-sm font-semibold leading-6  rounded-md   group gap-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"  class="w-6 h-6  shrink-0">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75" />
                     </svg>
                    My Submissions
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="flex p-2 text-sm font-semibold leading-6 text-indigo-200 rounded-md hover:text-white hover:bg-indigo-700 group gap-x-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-indigo-200 shrink-0 group-hover:text-white">
+                  <a href="#" class="
+                    {{ request()->routeIs('agent.settings') ? 'bg-white text-indigo-600' : 'text-indigo-200 hover:text-white hover:bg-indigo-700' }}
+                  flex p-2 text-sm font-semibold leading-6 rounded-md  group gap-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6  shrink-0">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
                     </svg>
                     Reports
@@ -198,7 +205,7 @@
         </nav>
       </div>
     </div>
-  
+
     <div class="lg:pl-72">
       <div class="sticky top-0 z-40 flex items-center h-16 px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-8">
         <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
@@ -207,10 +214,10 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
-  
+
         <!-- Separator -->
         <div class="w-px h-6 bg-gray-900/10 lg:hidden" aria-hidden="true"></div>
-  
+
         <div class="flex self-stretch flex-1 gap-x-4 lg:gap-x-6">
           <div class="relative flex items-center flex-1" >
               <h1 class="text-xl font-extrabold text-gray-700 uppercase">
@@ -224,10 +231,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
               </svg>
             </button>
-  
+
             <!-- Separator -->
             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true"></div>
-  
+
             <!-- Profile dropdown -->
             <div  x-data="{show:false}" class="relative">
               <button x-on:click="show=!show" x-on:click.away="show=false" type="button" class="-m-1.5 flex items-center p-1.5" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
@@ -237,7 +244,7 @@
                   <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
                     {{ auth()->user()->name }}
                   </span>
-                  <svg 
+                  <svg
                     x-bind:class="{
                       'rotate-180 duration-150': show,
                       'rotate-0 duration-150': !show
@@ -258,8 +265,8 @@
               <a href="/admin/account-setting" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Account Setting</a>
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
-  
-                <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer" 
+
+                <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
                         onclick="event.preventDefault();
                                     this.closest('form').submit();">
                     {{ __('Sign out') }}
@@ -270,7 +277,7 @@
           </div>
         </div>
       </div>
-  
+
       <main class="py-10">
         <div class="px-4 sm:px-6 lg:px-8">
           {{ $slot }}

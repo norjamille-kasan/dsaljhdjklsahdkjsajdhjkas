@@ -117,4 +117,14 @@ class ManageSubmissions extends Component
     {
         return redirect('/print?filterCompany='.$this->filterCompany.'&filterSegment='.$this->filterSegment.'&filterTask='.$this->filterTask.'&filterStartDate='.$this->filterStartDate.'&filterEndDate='.$this->filterEndDate.'&filterOrderBy='.$this->filterOrderBy.'');
     }
+
+    public function clearFilter()
+    {
+        $this->filterCompany = '';
+        $this->filterSegment = '';
+        $this->filterTask = '';
+        $this->filterStartDate = '';
+        $this->filterEndDate = '';
+        $this->filterOrderBy = 'desc';
+    }
 }

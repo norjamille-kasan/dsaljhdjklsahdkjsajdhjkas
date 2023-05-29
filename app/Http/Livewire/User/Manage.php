@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\UserService;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
 use WireUi\Traits\Actions;
 
 class Manage extends Component
@@ -19,6 +20,8 @@ class Manage extends Component
     public $createModal = false;
 
     public $editModal = false;
+
+    public $roles = [];
 
     public $queryString = [
         'search' => ['except' => ''],
@@ -44,7 +47,7 @@ class Manage extends Component
             'createForm.name' => 'required',
             'createForm.email' => 'required|email|unique:users,email',
             'createForm.password' => 'required|min:8',
-            'createForm.role' => 'required|in:Admin,Agent',
+            'createForm.role' => 'required|in:'.implode(',', $this->roles->pluck('name')->toArray()),
         ], [], [
             'createForm.name' => 'Name',
             'createForm.email' => 'Email',
@@ -62,6 +65,11 @@ class Manage extends Component
             'updateForm.name' => 'Name',
             'updateForm.email' => 'Email',
         ]);
+    }
+
+    public function mount()
+    {
+        $this->roles = Role::all();
     }
 
     public function render()

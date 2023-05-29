@@ -13,13 +13,13 @@
 
         @wireUiScripts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-       
+
         @livewireStyles
         <style>
             [x-cloak] { display: none !important; }
         </style>
     </head>
-    <body class="h-full font-sans antialiased">
+    <body class="h-full bg-gray-50 font-sans antialiased">
         <x-notifications />
         <x-dialog />
        {{ $slot }}

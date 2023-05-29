@@ -1,5 +1,5 @@
 <x-admin page-title="Manage User Permission">
-  @livewire('admin.manage-permissions',[
-    'userId'=>$id
-  ])
+    @livewire('admin.manage-permissions', [
+        'roleId' => $id,
+    ])
 </x-admin>

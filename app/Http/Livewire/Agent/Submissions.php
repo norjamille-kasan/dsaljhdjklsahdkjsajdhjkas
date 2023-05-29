@@ -16,6 +16,8 @@ class Submissions extends Component
 
     public $filterCompany = '';
 
+    public $search = '';
+
     public $filterSegment = '';
 
     public $filterTask = '';
@@ -72,6 +74,9 @@ class Submissions extends Component
     {
         return view('livewire.agent.submissions', [
             'submissions' => Submission::query()
+                ->when($this->search, function ($query) {
+                    return $query->where('record_number',$this->search);
+                })
                 ->where('user_id', auth()->user()->id)
                 ->when($this->filterCompany, function ($query) {
                     return $query->where('company_id', $this->filterCompany);
@@ -89,6 +94,7 @@ class Submissions extends Component
                     return $query->where('created_at', '<=', $this->filterEndDate);
                 })
                 ->orderBy('created_at', $this->filterOrderBy)
+                ->withSum('timelines', 'time_before_resume')
                 ->paginate(10),
         ]);
     }
@@ -116,8 +122,19 @@ class Submissions extends Component
     {
         $newForm = Submission::create([
             'user_id' => auth()->user()->id,
+            'start_time'=> now(),
+            'status' => 'in_progress'
         ]);
-
         return redirect()->route('agent.start-form', $newForm->id);
+    }
+
+    public function clearFilter()
+    {
+        $this->filterCompany = '';
+        $this->filterSegment = '';
+        $this->filterTask = '';
+        $this->filterStartDate = '';
+        $this->filterEndDate = '';
+        $this->filterOrderBy = 'desc';
     }
 }

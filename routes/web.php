@@ -42,7 +42,11 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
         return view('admin.users');
     })->name('admin.users');
 
-    Route::get('/users/{id}/permissions', function ($id) {
+    Route::get('/role-and-permissions', function () {
+        return view('admin.role-and-permissions');
+    })->name('admin.role-and-permissions');
+
+    Route::get('/roles/{id}/permissions', function ($id) {
         return view('admin.permissions',[
             'id' => $id,
         ]);
@@ -69,7 +73,8 @@ Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
     })->name('admin.manage-company');
 });
 
-Route::prefix('agent')->middleware(['auth', 'role:Agent'])->group(function () {
+Route::prefix('agent')->middleware(['auth'])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('agent.dashboard');
     })->name('agent.dashboard');
@@ -89,11 +94,13 @@ Route::prefix('agent')->middleware(['auth', 'role:Agent'])->group(function () {
     Route::get('/submissions', function () {
         return view('agent.submission');
     })->name('agent.submissions');
+    
 });
 
 Route::get('/print', function (Request $request) {
     return view('report', [
         'submissions' => \App\Models\Submission::query()
+            ->where('status', 'submitted')
             ->when(auth()->user()->hasRole('Agent'), function ($query) {
                 return $query->where('user_id', auth()->user()->id);
             })

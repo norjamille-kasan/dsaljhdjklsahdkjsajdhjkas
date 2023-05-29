@@ -23,7 +23,7 @@
                 </div>
             @endif
             <div wire:key="resart-button">
-                <x-button 
+                <x-button
                 x-on:confirm="{
                     title: 'Are you sure you want to restart the timer?',
                     icon: 'warning',

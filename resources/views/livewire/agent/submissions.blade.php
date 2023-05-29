@@ -1,28 +1,25 @@
-<div class="grid space-y-4">
-    <div class="flex justify-between p-2 space-x-2 border rounded-lg">
-        {{-- action panel --}}
-        <div class="flex space-x-2 tems-center">
-            <x-native-select wire:model="filterCompany">
-                <option value="">All Companies</option>
-                @foreach ($companies as $company)
-                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                @endforeach
-            </x-native-select>
-            <x-native-select wire:model="filterSegment">
-                <option value="">All Segments</option>
-                @foreach ($segments as $segment)
-                    <option value="{{ $segment->id }}">{{ $segment->description }}</option>
-                @endforeach
-            </x-native-select>
-            <x-native-select wire:model="filterTask">
-                <option value="">All Tasks</option>
-                @foreach ($tasks as $task)
-                    <option value="{{ $task->id }}">{{ $task->name }}</option>
-                @endforeach
-            </x-native-select>
-            <span class="text-gray-300">
-                |
-            </span>
+<div x-data="{ showFilter: $persist('false') }" class="grid space-y-4">
+    <div class="p-2 bg-white space-x-2  border rounded-lg">
+        <div class="flex justify-between ">
+            <div class="flex w-72 space-x-2">
+                <div>
+                    <div class="relative  rounded-md shadow-sm">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6 text-gray-400">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                            </svg>
+                        </div>
+                        <input type="search" name="search" id="search" wire:model.debounce.500ms="search"
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            placeholder="Search Record Number">
+                    </div>
+                </div>
+            </div>
+            {{-- <div class="flex space-x-2 tems-center">
+
+
             <div class="flex items-center space-x-2">
                 <span>
                     Start Date
@@ -38,89 +35,57 @@
             <x-button wire:click="clearDateFilter" red spinner="clearDateFilter">
                 Clear Date
             </x-button>
+        </div> --}}
+            <div class="flex space-x-2">
+                <x-button x-on:click="showFilter=!showFilter" icon="filter">
+                    <span x-text="showFilter? 'Close Filters':'Filters'">Filters</span>
+                </x-button>
+                <x-button wire:click="startNewForm" icon="plus" spinner="startNewForm">
+                    New Form
+                </x-button>
+                <x-button wire:click="print" icon="printer" spinner="spinner">
+                    Print
+                </x-button>
+            </div>
         </div>
-        <div class="flex space-x-2">
-            <x-button wire:click="startNewForm" icon="plus" spinner="startNewForm" primary green>
-                New Form
-            </x-button>
-            <x-button wire:click="print" icon="printer" green spinner="spinner">
-                Print
-            </x-button>
+        <div x-cloak x-show="showFilter" x-collapse>
+            <div class="p-2 space-y-2">
+                <h1 class="text-indigo-600 font-semibold text-lg">
+                    Filters
+                </h1>
+                <div class="grid grid-cols-5 gap-4">
+                    <x-native-select label="Company" wire:model="filterCompany">
+                        <option value="">All Companies</option>
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        @endforeach
+                    </x-native-select>
+                    <x-native-select label="Segment" wire:model="filterSegment">
+                        <option value="">All Segments</option>
+                        @foreach ($segments as $segment)
+                            <option value="{{ $segment->id }}">{{ $segment->description }}</option>
+                        @endforeach
+                    </x-native-select>
+                    <x-native-select label="Task" wire:model="filterTask">
+                        <option value="">All Tasks</option>
+                        @foreach ($tasks as $task)
+                            <option value="{{ $task->id }}">{{ $task->name }}</option>
+                        @endforeach
+                    </x-native-select>
+                    <x-input type="date" label="Start Date" wire:model="filterStartDate" class="pl-4" />
+                    <x-input type="date" label="End Date" wire:model="filterEndDate" class="pl-4" />
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <x-button wire:click="clearDateFilter" flat spinner="clearDateFilter">
+                        Clear Date
+                    </x-button>
+                    <x-button wire:click="clearFilter" flat negative spinner="clearFilter">
+                        Clear All Filters
+                    </x-button>
+                </div>
+            </div>
         </div>
     </div>
-    {{-- data table --}}
-    {{-- <div>
-        <x-table :headers="[
-            'Application ID',
-            'Agent Name',
-            'Start Time - End Time (Time Spent)',
-            'Record Number',
-            'Company',
-            'Segment',
-            'Task',
-            '',
-        ]">
-            @forelse ($submissions as $submission)
-                <tr>
-                    <x-t-cell>{{ $submission->id }}</x-t-cell>
-                    <x-t-cell>{{ $submission->agent_name??'N/A' }}</x-t-cell>
-                    <x-t-cell>
-                        @if ($submission->start_time)
-                        {{ \Carbon\Carbon::parse($submission->start_time)->format('d/m/Y h:i A') }}
-                        -
-                        {{ \Carbon\Carbon::parse($submission->end_time)->format('d/m/Y h:i A') }}
-                        @php
-                            $mins = $submission->total_time_spent / 60;
-                            $hours = $mins / 60;
-                            $mins = $mins % 60;
-                            $hours = $hours % 60;
-                            $time_spent = $hours . 'h ' . $mins . 'm';
-                        @endphp
-                        ({{ $time_spent }})
-                        @else
-                            N/A
-                        @endif
-                    </x-t-cell>
-                    <x-t-cell>{{ $submission?->record_number??'N/A' }}</x-t-cell>
-                    <x-t-cell>{{ $submission?->company->name??'N/A' }}</x-t-cell>
-                    <x-t-cell>{{ $submission?->segment->description??'N/A' }}</x-t-cell>
-                    <x-t-cell>{{ $submission?->task->name??'N/A' }}</x-t-cell>
-                    <x-t-cell>
-                       <div class="flex space-x-2">
-                        @if ($submission->status == 'pending')
-                            <x-button href="{{ route('agent.start-form',['id'=>$submission->id]) }}" sm type="button" flat color="blue">
-                                Start Form
-                            </x-button>
-                        @endif
-                        @if ($submission->status == 'paused')
-                            <x-button href="{{ route('agent.start-form',['id'=>$submission->id]) }}" sm type="button" flat warning>
-                                Continue
-                            </x-button>
-                        @endif
-                        @if ($submission->status == 'submitted')
-                            <x-button sm type="button" flat positive>
-                                View
-                            </x-button>
-                        @endif
-                        @if ($submission->isInProgress())
-                            <x-button  href="{{ route('agent.start-form',['id'=>$submission->id]) }}" sm type="button" flat positive>
-                                Continue <span class="text-red-600 animate-pulse">(In Progress)</span>
-                            </x-button>
-                        @endif
-                       </div>
-                    </x-t-cell>
-                </tr>
-            @empty
-                <tr>
-                    <x-t-cell colspan="8" class="text-center">No Submissions</x-t-cell>
-                </tr>
-            @endforelse
-            <x-slot name="footer">
-                {{ $submissions->links() }}
-            </x-slot>
-        </x-table>
-    </div> --}}
-
     <div>
         <div class="overflow-hidden bg-white border sm:rounded-md">
             <ul role="list" class="divide-y divide-gray-200">
@@ -133,7 +98,8 @@
                                         <div>
                                             @if ($submission->isSubmitted())
                                                 <p class="text-sm font-medium text-indigo-600 truncate">
-                                                    {{ $submission->agent_name }} {{ $submission->pause_id ? '| Pause ID :'.$submission->pause_id : '' }}
+                                                    {{ $submission->agent_name }}
+                                                    {{ $submission->pause_id ? '| Pause ID :' . $submission->pause_id : '' }}
                                                 </p>
                                             @else
                                                 <p class="text-sm font-medium text-red-600 truncate animate-pulse">
@@ -147,12 +113,19 @@
                                         </div>
                                         <div class="hidden md:block">
                                             <div>
-                                                <p class="text-sm text-gray-900">
-                                                    Created At
+                                                <div class="text-sm flex space-x-2 text-gray-900">
+                                                    <span> Stated At</span>
                                                     <time datetime="2020-01-07">
-                                                        {{ $submission->created_at->format('M d, Y h:i A') }}
+                                                        {{ \Carbon\Carbon::parse($submission->start_time)->format('d/m/Y h:i A') }}
                                                     </time>
-                                                </p>
+                                                 @if ($submission->isSubmitted())
+                                                    <span> | </span>
+                                                    <span> Ended At</span>
+                                                    <time datetime="2020-01-07">
+                                                        {{ \Carbon\Carbon::parse($submission->end_time)->format('d/m/Y h:i A') }}
+                                                    </time>
+                                                 @endif
+                                                </div>
                                                 <p class="flex items-center mt-2 text-sm text-gray-500">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -160,17 +133,14 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
-                                                    {{ \Carbon\Carbon::parse($submission->start_time)->format('d/m/Y h:i A') }}
-                                                    -
-                                                    {{ \Carbon\Carbon::parse($submission->end_time)->format('d/m/Y h:i A') }}
-                                                    @php
-                                                        $mins = $submission->total_time_spent / 60;
-                                                        $hours = $mins / 60;
-                                                        $mins = $mins % 60;
-                                                        $hours = $hours % 60;
-                                                        $time_spent = $hours . 'h ' . $mins . 'm';
-                                                    @endphp
-                                                    ({{ $time_spent }})
+                                                   @php
+                                                       $diffInSec = \Carbon\Carbon::parse($submission->start_time)->diffInSeconds(\Carbon\Carbon::parse($submission->end_time));
+                                                  @endphp
+                                                  @if ($submission->isSubmitted())
+                                                  <span class="ml-2">
+                                                   ( {{ gmdate('H:i:s', $diffInSec - $submission->timelines_sum_time_before_resume) }})
+                                                </span>
+                                                  @endif
                                                 </p>
                                             </div>
                                         </div>
@@ -194,23 +164,24 @@
                             <div class="flex justify-end p-2 mb-2 space-x-2 border-y">
                                 @if ($submission->isPending())
                                     <x-button href="{{ route('agent.start-form', ['id' => $submission->id]) }}"
-                                        icon="document-duplicate" label="Start Form" flat sm />
+                                        icon="document-duplicate" label="Start Form" flat  />
                                 @endif
                                 @if ($submission->isSubmitted())
-                                    {{-- <x-button icon="eye" label="View" flat sm /> --}}
-                                    <x-badge positive>
-                                        Submitted
-                                    </x-badge>
+                                    <x-button flat icon="eye">
+                                        More Details
+                                    </x-button>
                                 @endif
                                 @if ($submission->isInProgress())
-                                    <x-button href="{{ route('agent.start-form', ['id' => $submission->id]) }}" icon="pencil" flat sm>
+                                    <x-button href="{{ route('agent.start-form', ['id' => $submission->id]) }}"
+                                        icon="pencil" flat >
                                         <span class="text-red-500 animate-pulse">
                                             Continue
                                         </span>
                                     </x-button>
                                 @endif
                                 @if ($submission->isPaused())
-                                    <x-button  href="{{ route('agent.start-form', ['id' => $submission->id]) }}" icon="play" label="Resume" flat sm />
+                                    <x-button href="{{ route('agent.start-form', ['id' => $submission->id]) }}"
+                                        icon="play" label="Resume" flat  />
                                 @endif
                             </div>
                             <div x-on:dblclick="hov=true"
@@ -225,7 +196,6 @@
                                                         <h3 class="text-sm font-semibold text-gray-800">
                                                             <a href="#"
                                                                 class="hover:underline focus:outline-none">
-                                                                <!-- Extend touch target to entire panel -->
                                                                 <span class="absolute inset-0"
                                                                     aria-hidden="true"></span>
                                                                 Question #{{ $key + 1 }} :
@@ -246,7 +216,6 @@
                                                         <h3 class="text-sm font-semibold text-gray-800">
                                                             <a href="#"
                                                                 class="hover:underline focus:outline-none">
-                                                                <!-- Extend touch target to entire panel -->
                                                                 <span class="absolute inset-0"
                                                                     aria-hidden="true"></span>
                                                                 No answers found
@@ -276,7 +245,67 @@
             {{ $submissions->links() }}
         </div>
     </div>
-
+    {{-- <div x-data="{ showDetails: '' }">
+        <x-table :headers="['Record No.', 'Pause ID', 'Status', 'Action']">
+            @foreach ($submissions as $submission)
+                    <tr wire:key="data-{{ $submission->id }}">
+                        <x-t-cell>
+                            {{ $submission->record_number ?? 'N/A' }}
+                        </x-t-cell>
+                        <x-t-cell>
+                            {{ $submission->pause_id ?? 'N/A' }}
+                        </x-t-cell>
+                        <x-t-cell>
+                            @if ($submission->isPending())
+                                <x-badge warning>
+                                    Pending
+                                </x-badge>
+                            @endif
+                            @if ($submission->isSubmitted())
+                                <x-badge positive>
+                                    Submitted
+                                </x-badge>
+                            @endif
+                            @if ($submission->isInProgress())
+                                <x-badge blue>
+                                    In Progress
+                                </x-badge>
+                            @endif
+                            @if ($submission->isPaused())
+                                <x-badge red>
+                                    Paused
+                                </x-badge>
+                            @endif
+                        </x-t-cell>
+                        <x-t-cell>
+                            <div class="space-x-2 flex items-center">
+                                @if ($submission->isPending())
+                                    <x-button href="{{ route('agent.start-form', ['id' => $submission->id]) }}"
+                                        icon="document-duplicate" label="Start Form" flat sm />
+                                @endif
+                                @if ($submission->isSubmitted())
+                                    <x-button x-on:click="
+                                        showDetails = showDetails == {{ $submission->id }} ? '' : {{ $submission->id }};
+                                    " flat icon="eye" label="View" sm />
+                                @endif
+                                @if ($submission->isInProgress())
+                                    <x-button href="{{ route('agent.start-form', ['id' => $submission->id]) }}"
+                                        icon="pencil" flat sm>
+                                        <span class="text-red-500 animate-pulse">
+                                            Continue
+                                        </span>
+                                    </x-button>
+                                @endif
+                                @if ($submission->isPaused())
+                                    <x-button href="{{ route('agent.start-form', ['id' => $submission->id]) }}"
+                                        icon="play" label="Resume" flat sm />
+                                @endif
+                            </div>
+                        </x-t-cell>
+                    </tr>
+            @endforeach
+        </x-table>
+    </div> --}}
     {{-- loading indicator --}}
     <div wire:loading.flex wire:target="startNewForm"
         class="absolute right-0 z-50 flex items-center justify-center w-full h-full -top-4 bg-gray-400/50">

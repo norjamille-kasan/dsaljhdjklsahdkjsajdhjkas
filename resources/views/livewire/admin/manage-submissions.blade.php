@@ -1,53 +1,90 @@
 <div>
     @can('view submissions')
-        <div class="grid space-y-4">
-            <div class="flex items-center justify-between p-2 space-x-2 border rounded-lg">
-                <div class="flex space-x-2 " x-animate>
-                    <x-native-select wire:model="filterCompany">
-                        <option value="">All Companies</option>
-                        @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->name }}</option>
-                        @endforeach
-                    </x-native-select>
-                    <x-native-select wire:model="filterSegment">
-                        <option value="">All Segments</option>
-                        @foreach ($segments as $segment)
-                            <option value="{{ $segment->id }}">{{ $segment->description }}</option>
-                        @endforeach
-                    </x-native-select>
-                    <x-native-select wire:model="filterTask">
-                        <option value="">All Tasks</option>
-                        @foreach ($tasks as $task)
-                            <option value="{{ $task->id }}">{{ $task->name }}</option>
-                        @endforeach
-                    </x-native-select>
-                    <span class="text-gray-300">
-                        |
-                    </span>
-                    <div class="flex items-center space-x-2">
-                        <span>
-                            Start Date
-                        </span>
-                        <x-input type="date" wire:model="filterStartDate" class="pl-4" />
+    <div x-data="{ showFilter: $persist('false') }" class="grid space-y-4">
+        <div class="p-2 bg-white space-x-2  border rounded-lg">
+            <div class="flex justify-between ">
+                <div class="flex w-72 space-x-2">
+                    <div>
+                        <div class="relative  rounded-md shadow-sm">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="w-6 h-6 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                </svg>
+                            </div>
+                            <input type="search" name="search" id="search" wire:model.debounce.500ms="search"
+                                class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                placeholder="Search Record Number">
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <span>
-                            End Date
-                        </span>
-                        <x-input type="date" wire:model="filterEndDate" class="pl-4" />
-                    </div>
-                    @if ($filterStartDate || $filterEndDate)
-                        <x-button wire:click="clearDateFilter" red spinner="clearDateFilter">
-                            Clear Date
-                        </x-button>
-                    @endif
                 </div>
+                {{-- <div class="flex space-x-2 tems-center">
+
+
+                <div class="flex items-center space-x-2">
+                    <span>
+                        Start Date
+                    </span>
+                    <x-input type="date" wire:model="filterStartDate" class="pl-4" />
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span>
+                        End Date
+                    </span>
+                    <x-input type="date" wire:model="filterEndDate" class="pl-4" />
+                </div>
+                <x-button wire:click="clearDateFilter" red spinner="clearDateFilter">
+                    Clear Date
+                </x-button>
+            </div> --}}
                 <div class="flex space-x-2">
-                    <x-button wire:click="print" icon="printer" green>
+                    <x-button x-on:click="showFilter=!showFilter" icon="filter">
+                        <span x-text="showFilter? 'Close Filters':'Filters'">Filters</span>
+                    </x-button>
+                    <x-button wire:click="print" icon="printer" spinner="spinner">
                         Print
                     </x-button>
                 </div>
             </div>
+            <div x-cloak x-show="showFilter" x-collapse>
+                <div class="p-2 space-y-2">
+                    <h1 class="text-indigo-600 font-semibold text-lg">
+                        Filters
+                    </h1>
+                    <div class="grid grid-cols-5 gap-4">
+                        <x-native-select label="Company" wire:model="filterCompany">
+                            <option value="">All Companies</option>
+                            @foreach ($companies as $company)
+                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                            @endforeach
+                        </x-native-select>
+                        <x-native-select label="Segment" wire:model="filterSegment">
+                            <option value="">All Segments</option>
+                            @foreach ($segments as $segment)
+                                <option value="{{ $segment->id }}">{{ $segment->description }}</option>
+                            @endforeach
+                        </x-native-select>
+                        <x-native-select label="Task" wire:model="filterTask">
+                            <option value="">All Tasks</option>
+                            @foreach ($tasks as $task)
+                                <option value="{{ $task->id }}">{{ $task->name }}</option>
+                            @endforeach
+                        </x-native-select>
+                        <x-input type="date" label="Start Date" wire:model="filterStartDate" class="pl-4" />
+                        <x-input type="date" label="End Date" wire:model="filterEndDate" class="pl-4" />
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <x-button wire:click="clearDateFilter" flat spinner="clearDateFilter">
+                            Clear Date
+                        </x-button>
+                        <x-button wire:click="clearFilter" flat negative spinner="clearFilter">
+                            Clear All Filters
+                        </x-button>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div>
                 <div class="overflow-hidden bg-white border sm:rounded-md">
                     <ul role="list" class="divide-y divide-gray-200">

@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>
-      TCT REPORT{{ date('Y-m-d h:i A') }}
+        TCT REPORT{{ date('Y-m-d h:i A') }}
     </title>
 
     <!-- Fonts -->
@@ -82,13 +82,13 @@
                         -
                         {{ \Carbon\Carbon::parse($submission->end_time)->format('d/m/Y h:i A') }}
                         @php
-                            $mins = $submission->total_time_spent / 60;
-                            $hours = $mins / 60;
-                            $mins = $mins % 60;
-                            $hours = $hours % 60;
-                            $time_spent = $hours . 'h ' . $mins . 'm';
+                            $diffInSec = \Carbon\Carbon::parse($submission->start_time)->diffInSeconds(\Carbon\Carbon::parse($submission->end_time));
                         @endphp
-                        ({{ $time_spent }})
+                        @if ($submission->isSubmitted())
+                            <span class="ml-2">
+                                ({{ gmdate('H:i:s', $diffInSec - $submission->timelines_sum_time_before_resume) }})
+                            </span>
+                        @endif
                     </td>
                     <td>{{ $submission->record_number }}</td>
                     <td>{{ $submission->pause_id }}</td>

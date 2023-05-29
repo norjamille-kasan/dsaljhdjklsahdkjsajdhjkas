@@ -14,47 +14,29 @@ class PayretoSeeder extends Seeder
      */
     public function run()
     {
-        $company = Company::create([
-            'name' => 'Payreto',
-        ]);
+        $company = Company::create(['name' => 'Payreto']);
+        $segment = $company->segments()->create(['description' => 'Payreto - Technical Support']);
+        $segment->tasks()->create(['name' => 'Break']);
+        $segment->tasks()->create(['name' => 'Internal Training']);
+        $segment->tasks()->create(['name' => 'External Training']);
+        $segment->tasks()->create(['name' => 'Internal Meeting']);
+        $segment->tasks()->create(['name' => 'Client Meeting']);
+        $segment->tasks()->create(['name' => 'Admin & Other Tasks']);
 
-        $segmentsWithTask = [
-            'Payreto - Technical Support' => [
-                'Break',
-                'Internal Training',
-                'External Training',
-                'Internal Meeting',
-                'Client Meeting',
-                'Admin & Other Tasks',
-            ],
-            'Payreto - Onboarding' => [
-                'Break',
-                'Internal Training',
-                'External Training',
-                'Internal Meeting',
-                'Client Meeting',
-                'Admin & Other Tasks',
-            ],
-            ' Payreto - Chargeback' => [
-                'Break',
-                'Internal Training',
-                'External Training',
-                'Internal Meeting',
-                'Client Meeting',
-                'Admin & Other Tasks',
-            ],
-        ];
+        $segment = $company->segments()->create(['description' => 'Payreto - Onboarding']);
+        $segment->tasks()->create(['name' => 'Break']);
+        $segment->tasks()->create(['name' => 'Internal Training']);
+        $segment->tasks()->create(['name' => 'External Training']);
+        $segment->tasks()->create(['name' => 'Internal Meeting']);
+        $segment->tasks()->create(['name' => 'Client Meeting']);
+        $segment->tasks()->create(['name' => 'Admin & Other Tasks']);
 
-        foreach ($segmentsWithTask as $segment => $tasks) {
-            $segment = $company->segments()->create([
-                'description' => $segment,
-            ]);
-
-            foreach ($tasks as $task) {
-                $segment->tasks()->create([
-                    'description' => $task,
-                ]);
-            }
-        }
+        $segment = $company->segments()->create(['description' => 'Payreto - Chargeback']);
+        $segment->tasks()->create(['name' => 'Break']);
+        $segment->tasks()->create(['name' => 'Internal Training']);
+        $segment->tasks()->create(['name' => 'External Training']);
+        $segment->tasks()->create(['name' => 'Internal Meeting']);
+        $segment->tasks()->create(['name' => 'Client Meeting']);
+        $segment->tasks()->create(['name' => 'Admin & Other Tasks']);
     }
 }

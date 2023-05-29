@@ -50,7 +50,7 @@ class QuestionService
     $task,
     $questionsForm = []
   ) {
-        $submitionCount = Submission::count();
+        $submitionCount = Submission::where('status','submitted')->count();
         $initials = substr(auth()->user()->name, 0, 1);
         DB::beginTransaction();
         $submission->update([
@@ -58,7 +58,7 @@ class QuestionService
             'agent_name' => auth()->user()->name,
             'pauses_and_resumes' => 'N/A',
             'end_time' => now(),
-            'record_number' => now()->format('Ymd') . '-' . $initials . '-' . str_pad($submitionCount + 1, 11, '0', STR_PAD_LEFT),
+            'record_number' => now()->format('Ymd') . '-' . $initials . '-' . str_pad($submitionCount +1, 11, '0', STR_PAD_LEFT),
             'company_id' => $company,
             'segment_id' => $segment,
             'task_id' => $task,
